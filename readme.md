@@ -21,7 +21,7 @@
     *   Introduccion al funcionamiento de Node y Npm
 
 #### ¿Qué es NPM (node package manager) ?
-*    Es un gestor de paquetes, el más popular que tiene JavaScript, donde encontrarás una gran cantidad de recursos para poder implementar en tus proyectos. También vas a poder crear tus propios paquetes y compartirlos con toda la comunidad..📌
+*    Es un gestor de paquetes, el más popular que tiene JavaScript, donde encontrarás una gran cantidad de recursos para poder implementar en tus proyectos. También vas a poder crear tus propios paquetes y compartirlos con toda la comunidad.📌
 
 ### Seccion 2 : Instalacion de Node los diferentes sistemas operativos.
 
@@ -126,4 +126,127 @@ node_modules
 ```
 ---
 
-*   
+*   Versionado semantico en el fichero package.lock.
+*   Dicho versionado  se indica de la siguiente manera : major , minor , patch.
+*   La tilde ~ coincide con la versión de parche más reciente (el tercer número) para la versión menor especificada (el segundo número).
+~ 1.2.3 coincidirá con todas las versiones 1.2.x, pero se mantendrá en espera en 1.3.0.
+
+*   El caret ^ es más relajado. Coincide con la versión secundaria más reciente (el segundo número) para la versión principal especificada (el primer número).
+
+    *   Cuando tiene : < : Versión menor a la indicada.
+    *   Cuando tiene : <= : Versión menor o igual a la indicada.
+    *   Cuando tiene : > : Versión mayor a la indicada.
+    *   Cuando tiene : >= : Versión mayor o igual a la indicada.
+
+    * Explicacion de **Package.json** vs **Package-lock.json**
+
+* Estos dos archivos son el corazón del manejo de dependencias de un proyecto en Node.
+
+- **Package.json** contiene mas información sobre el proyecto en si, y establece las dependencias principales del proyecto.
+
+- **Package-lock.json** guarda mas información sobre las dependencias. Por ejemplo: si estamos utilizando Express.js, esta estará referenciada en el package.json como dependencia, pero Express a su vez contiene 30 dependencias mas y 18 dependencias de desarrollo. Además de almacenar otra información importante como la version de las mismas. Esta información estará contenida en el package-lock.json.
+
+---
+
+#### Package.json
+
+*   Scripts:
+    *   Son comandos que podemos establecer para poder ejecutar desde la consola. Estos nos van a dar una serie de salidas según sea el caso.
+
+    *   Podemos crear la cantidad de scripts que necesitemos. Estos scripts van a poder correr de forma nativa dentro de nuestra terminal.
+
+```json
+// Example scripts running program
+"dev": "webpack-dev-server --mode development",
+"build": "webpack --mode production",
+"start": "serve ./dist -s -l 8080",
+"format": "prettier --write '{*.js,src/**/*.js{js,jsx}}'",
+"lint": "eslint src/ --fix"
+```
+
+---
+
+#### Soluciones de Errores
+##### Manejo y mejores practicas para errores.
+
+*   Comando verbose sirve para que el sistema nos muestre informacion de como se ejecuta la aplicacion con node.
+
+``` json
+
+npm run build --dd
+
+```
+
+*   Comando para limpiar cache
+
+``` json
+npm cache clean --force
+// Para verificar que verdaderamente se borro podemos usar
+npm cache verify
+
+// Si persiste un error  al borrar cache lo correcto seria eliminar carpeta node_modules y reinstalarla con el cache borrado para tener la ultima del repositorio de npm
+
+
+```
+
+ * El paquete rimraf se puede instalar con npm y permite borrar la carpeta node_modules desde cualquier sistema.
+```json
+//instalar globalmente
+sudo npm install rimraf -g 
+
+// ejecutar rimraf para borrar node_modules
+rimraf node_modules
+```
+---
+
+#### Auditar paquetes en node
+
+Podemos revisar las vulnerabilidades de nuestro proyecto con:
+*   **npm audit:**
+    *   En caso de tener vulverabilidades, se recomienda usar el comando:
+*   **npm audit fix:**
+    *   Y en caso de que esto no lo solucione, podemos ir actualizandolos de uno en uno.
+*   **npm update < package name > --depth 2**
+    *   Para actualizar el paquete y dependencias de un modulo instalado
+
+```json
+// Genera un archivo json de npm audit
+npm audit --json
+```
+---
+
+### Loguearse en NPM
+#### Registrar cuenta en la web de npm.
+
+```bash
+npm adduser 
+
+Username: <nickname>
+password: <your-password>
+email:    <email@email.com>
+```
+
+#### Probar paquete de  forma local
+*   Antes de subir probar paquete de manera local
+```bash
+sudo npm link
+#Se ejecuta la función
+random-msg
+```
+
+#### Publicar paquete en npm
+*   En la ruta del fichero a publicar ingresar comando.
+```bash
+npm publish 
+```
+---
+
+#### Informacion previa a la subida del package en npm
+* Para mejorar nuestros paquete y que cuente con los requerimientos mínimos para serlo haremos lo siguiente:
+crearemos un buen README.md en donde vamos a explicar lo que hará nuestro paquete osea toda nuestra documentación, además esto debe estar en ingles.
+
+*   Ademas debemos Conectarlo a un repositorio de github
+npm init ahora veremos que ya esta ligado a un repositorio, de igual forma podemos ver esta información en el package.json.
+
+    * **npm version <major |minor |patch>** nos permite actualizar la versión de nuestro proyecto o paquete ejem npm version patch y el resultado seria v1.0.1, muchas veces nos dira que debemos actualizar a la versión mas reciente de npm y lo hacemos con sudo install -g npm , si nos vamos al package veremos que la versión a cambiado, y para publicarlos volvemos a ejecutar el comando npm publish
+    *   **npm unpublish -f** para despublicar un paquete recuerda que debes estar ubicado en la carpeta raíz del proyecto
